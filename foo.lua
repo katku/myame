@@ -1,5 +1,5 @@
-scriptId = 'com.thalmic.examples.outputeverything'
-scriptTitle = "Output Everything"
+scriptId = 'game.myame'
+scriptTitle = "Game Myame"
 scriptDetailsUrl = "" -- We don't have this until it's submitted to the Myo Market
 
 myo.setLockingPolicy("none")
