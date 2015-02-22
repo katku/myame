@@ -12,11 +12,11 @@ commands = {'Make a fist', 'Spread your fingers',
             'Bend your hand in', 'Bend your hand out'}
 
 function onPoseEdge(pose, edge)
-	if pose == move and edge then
-		state = true
-	elseif pose == "doubleTap" then
-		tapstate = true
-	end
+    if pose == move and edge then
+        state = true
+    elseif pose == "doubleTap" then
+        tapstate = true
+    end
     --myo.debug("onPoseEdge: " .. pose .. ", " .. edge)--
 end
 
@@ -27,40 +27,40 @@ num_moves = 10
 t = num_moves*move_time+reaction_time+1
 
 function onPeriodic()
-	t = t + 1
-	if t > num_moves*move_time+reaction_time+1 then
-		if tapstate then
-			myo.debug("Let's try again!")
-			points = 0
-			t = 0
-		end
-	elseif t == num_moves*move_time+reaction_time+1 then
-		tapstate = false
-		if points > 7 then
-			myo.debug("Well done, you got " .. points .." points.")
-		elseif points > 3 then
-			myo.debug("Not that bad, you got " .. points .. " points.")
-		else
-			myo.debug("Uh-oh, you got only " .. points .. " points.")
-		end
-	elseif (t % move_time == 0) then
-		i = math.floor(4 * math.random())+1
-		state = false
-		move = moves[i]
-		myo.debug(commands[i] .. "!!!!!!!")
-	elseif (t > move_time and t % move_time == reaction_time) then
-		if state then
-			myo.debug("YAY")
-			points = points + 1
-		else
-			myo.debug("LOSER")
-		end
+    t = t + 1
+    if t > num_moves*move_time+reaction_time+1 then
+        if tapstate then
+            myo.debug("Let's try again!")
+            points = 0
+            t = 0
+        end
+    elseif t == num_moves*move_time+reaction_time+1 then
+        tapstate = false
+        if points > 7 then
+            myo.debug("Well done, you got " .. points .." points.")
+        elseif points > 3 then
+            myo.debug("Not that bad, you got " .. points .. " points.")
+        else
+            myo.debug("Uh-oh, you got only " .. points .. " points.")
+        end
+    elseif (t % move_time == 0) then
+        i = math.floor(4 * math.random())+1
+        state = false
+        move = moves[i]
+        myo.debug(commands[i] .. "!!!!!!!")
+    elseif (t > move_time and t % move_time == reaction_time) then
+        if state then
+            myo.debug("YAY")
+            points = points + 1
+        else
+            myo.debug("LOSER")
+        end
 
-	end
+    end
 end
 
 function onUnlock()
-	myo.debug("Unlocked")
+    myo.debug("Unlocked")
 end
 
 function onForegroundWindowChange(app, title)
