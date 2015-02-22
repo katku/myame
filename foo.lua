@@ -4,12 +4,18 @@ scriptDetailsUrl = "" -- We don't have this until it's submitted to the Myo Mark
 
 myo.setLockingPolicy("none")
 
+MOVES = {'fist', 'fingersSpread', 'waveIn', 'waveOut'}
+COMMANDS = {'Make a fist', 'Spread your fingers',
+            'Bend your hand in', 'Bend your hand out'}
+
+REACTION_TIME = 80
+MOVE_TIME = 100
+NUM_MOVES = 10
+GAME_TIME = NUM_MOVES * MOVE_TIME + REACTION_TIME + 1
+
 state = false
 tapstate = false
 move = ''
-moves = {'fist', 'fingersSpread', 'waveIn', 'waveOut'}
-commands = {'Make a fist', 'Spread your fingers',
-            'Bend your hand in', 'Bend your hand out'}
 
 function onPoseEdge(pose, edge)
     if pose == move and edge then
@@ -20,21 +26,18 @@ function onPoseEdge(pose, edge)
     --myo.debug("onPoseEdge: " .. pose .. ", " .. edge)--
 end
 
-
-reaction_time = 80
-move_time = 100
-num_moves = 10
-t = num_moves*move_time+reaction_time+1
+t = NUM_MOVES * MOVE_TIME+REACTION_TIME + 1
 
 function onPeriodic()
     t = t + 1
-    if t > num_moves*move_time+reaction_time+1 then
+    if t > GAME_TIME then
         if tapstate then
-            myo.debug("Let's try again!")
+            myo.vibrate("medium")
+            myo.debug("LET'S GO!")
             points = 0
             t = 0
         end
-    elseif t == num_moves*move_time+reaction_time+1 then
+    elseif t == GAME_TIME then
         tapstate = false
         if points > 7 then
             myo.debug("Well done, you got " .. points .." points.")
@@ -43,19 +46,18 @@ function onPeriodic()
         else
             myo.debug("Uh-oh, you got only " .. points .. " points.")
         end
-    elseif (t % move_time == 0) then
+    elseif (t % MOVE_TIME == 0) then
         i = math.floor(4 * math.random())+1
         state = false
-        move = moves[i]
-        myo.debug(commands[i] .. "!!!!!!!")
-    elseif (t > move_time and t % move_time == reaction_time) then
+        move = MOVES[i]
+        myo.debug(COMMANDS[i] .. "!!!!!!!")
+    elseif (t > MOVE_TIME and t % MOVE_TIME == REACTION_TIME) then
         if state then
             myo.debug("YAY")
             points = points + 1
         else
             myo.debug("LOSER")
         end
-
     end
 end
 
